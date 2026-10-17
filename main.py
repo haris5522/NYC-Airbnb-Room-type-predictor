@@ -1,10 +1,13 @@
 from collections import UserList
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import pandas as pd
 from pydantic import BaseModel, Field
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+
 
 # --- Compatibility fix -------------------------------------------------------
 # Model_Pipeline.pkl was saved with scikit-learn 1.6.1. Newer scikit-learn
@@ -50,9 +53,22 @@ class Features(BaseModel):
     neighbourhood: str = Field(..., min_length=1, description="Specific neighbourhood name")
 
 
-@app.get('/')
-def greet():
-    return "Hello Guyss"
+BASE_DIR = Path(__file__).parent
+
+
+# Serve the frontend files
+@app.get("/")
+def home():
+    return FileResponse("index.html")
+
+
+@app.get("/style.css")
+def css():
+    return FileResponse("style.css", media_type="text/css")
+
+@app.get("/script.js")
+def js():
+    return FileResponse("script.js", media_type="application/javascript")
 
 
 @app.post('/predict')

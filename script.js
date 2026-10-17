@@ -5,8 +5,12 @@
    Change DEFAULT_API if your FastAPI server runs somewhere else.
    You can also click the "API connected" label to change it in the page.
    ------------------------------------------------------------ */
-const DEFAULT_API = "http://127.0.0.1:8000";
-const API_STORE = "nyc-room-api";
+const DEFAULT_API =
+  window.location.protocol === "file:" ||
+  ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? "http://127.0.0.1:8000"
+    : window.location.origin;
+const API_STORE = "nyc-room-api-v2";
 
 /* Order matches model.classes_, so Probability[i] belongs to CLASSES[i]. */
 const CLASSES = [
