@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+pandas
+numpy
+joblib
+# Model_Pipeline.pkl was saved with scikit-learn 1.6.1.
+# 1.6.x and 1.7.x both work with the fix in main.py.
+scikit-learn>=1.6.1,<1.8

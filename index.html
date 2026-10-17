@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Room Type Predictor · NYC Airbnb</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-sky" id="bgSky" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <header class="head">
+      <p class="eyebrow">NYC Airbnb · Room type predictor</p>
+      <h1>What kind of stay<br />is this listing?</h1>
+      <p class="lede">
+        Enter a listing's details and the model will predict whether it's an entire home, a
+        private room, or a shared room — the way the city lights up differently behind each kind
+        of door.
+      </p>
+    </header>
+
+    <div class="cards">
+      <!-- ------------ Form ------------ -->
+      <form class="card" id="form" novalidate autocomplete="off">
+        <div class="card-head">
+          <h2>Listing details</h2>
+          <button type="button" class="pill" id="exampleBtn">Try an example</button>
+        </div>
+
+        <p class="section">Location</p>
+        <div class="grid">
+          <label class="f">
+            <span>Latitude</span>
+            <input id="latitude" name="latitude" type="number" step="any" inputmode="decimal" />
+            <em class="err" id="latitude-err"></em>
+          </label>
+          <label class="f">
+            <span>Longitude</span>
+            <input id="longitude" name="longitude" type="number" step="any" inputmode="decimal" />
+            <em class="err" id="longitude-err"></em>
+          </label>
+          <label class="f">
+            <span>Borough</span>
+            <select id="neighbourhood_group" name="neighbourhood_group">
+              <option>Manhattan</option>
+              <option>Brooklyn</option>
+              <option>Queens</option>
+              <option>Bronx</option>
+              <option>Staten Island</option>
+            </select>
+          </label>
+          <label class="f">
+            <span>Neighbourhood</span>
+            <select id="neighbourhood" name="neighbourhood"></select>
+            <em class="err" id="neighbourhood-err"></em>
+          </label>
+        </div>
+
+        <p class="section">Pricing &amp; stay</p>
+        <div class="grid">
+          <label class="f">
+            <span>Price per night (USD)</span>
+            <input id="price" name="price" type="number" step="any" inputmode="decimal" />
+            <em class="err" id="price-err"></em>
+          </label>
+          <label class="f">
+            <span>Minimum nights</span>
+            <input id="minimum_nights" name="minimum_nights" type="number" step="1" inputmode="numeric" />
+            <em class="err" id="minimum_nights-err"></em>
+          </label>
+          <div class="f wide">
+            <label for="availability_365"><span>Days available per year</span></label>
+            <input class="range" id="availability_365" name="availability_365" type="range" min="0" max="365" step="1" />
+            <p class="avail"><b id="availVal">365</b> / 365 days</p>
+          </div>
+        </div>
+
+        <p class="section">Reviews &amp; host</p>
+        <div class="grid">
+          <label class="f">
+            <span>Total reviews</span>
+            <input id="number_of_reviews" name="number_of_reviews" type="number" step="1" inputmode="numeric" />
+            <em class="err" id="number_of_reviews-err"></em>
+          </label>
+          <label class="f">
+            <span>Reviews per month</span>
+            <input id="reviews_per_month" name="reviews_per_month" type="number" step="any" inputmode="decimal" />
+            <em class="err" id="reviews_per_month-err"></em>
+          </label>
+          <label class="f wide">
+            <span>Listings by this host</span>
+            <input id="calculated_host_listings_count" name="calculated_host_listings_count" type="number" step="1" inputmode="numeric" />
+            <em class="err" id="calculated_host_listings_count-err"></em>
+          </label>
+        </div>
+
+        <button type="submit" class="go" id="goBtn">
+          <span class="go-label">Predict room type</span>
+        </button>
+      </form>
+
+      <!-- ------------ Prediction ------------ -->
+      <section class="card result" id="resultCard" data-state="idle" aria-live="polite">
+        <div class="card-head">
+          <h2>Prediction</h2>
+          <button type="button" class="status" id="status" data-state="checking" title="Click to change the API address">
+            <i aria-hidden="true"></i><span id="statusText">Checking API</span>
+          </button>
+        </div>
+
+        <div class="city" id="city" aria-hidden="true"></div>
+
+        <p class="hint" id="hint">Fill in the listing details and predict to see the city light up.</p>
+
+        <div class="verdict" id="verdict">
+          <p class="section">Most likely</p>
+          <h3 id="verdictTitle"></h3>
+          <p class="sub" id="verdictSub"></p>
+        </div>
+
+        <ul class="bars" id="bars"></ul>
+
+        <div class="fail" id="fail">
+          <h3 id="failTitle">Cannot reach the API</h3>
+          <p id="failMsg"></p>
+        </div>
+      </section>
+    </div>
+
+    <footer class="foot">Model served via FastAPI &amp; scikit-learn · trained on NYC Airbnb listing data</footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
